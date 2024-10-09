@@ -9,6 +9,7 @@ import { z } from "zod";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import axios from "axios"
 
 const formSchema = z.object({
     name: z.string().min(3, { message: "Business name must be more than 3 characters" })
@@ -26,7 +27,15 @@ export const StoreModal = () => {
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+        try {
+            setIsLoading(true)
+            const response = await axios.post("/api/stores", values);
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
