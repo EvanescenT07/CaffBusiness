@@ -7,6 +7,7 @@ import {
   SignedOut,
   UserButton
 } from '@clerk/nextjs'
+import { ModalProvider } from "@/providers/modal-provider";
 import './globals.css'
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["100", '200', '300', '400', '500', '600', '700', '800', '900'] });
@@ -31,6 +32,7 @@ export default function RootLayout({
           <SignedIn>
             <UserButton />
           </SignedIn>
+          <ModalProvider />
           {children}
         </body>
       </html>
