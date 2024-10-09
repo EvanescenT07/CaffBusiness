@@ -10,13 +10,13 @@ export const ModalProvider = () => {
         setIsMounted(true);
     }, [])
 
-    if(!isMounted) {
+    if (!isMounted) {
         return null;
     }
 
     return (
         <>
-            <StoreModal  />
+            <StoreModal />
         </>
     )
 }

@@ -1,4 +1,4 @@
-import {create} from "zustand";
+import { create } from "zustand";
 
 interface modalHooksProps {
   isOpen: boolean;
@@ -8,7 +8,7 @@ interface modalHooksProps {
 
 export const modalHooks = create<modalHooksProps>((set) => ({
   isOpen: false,
-  onOpen: () => set({isOpen: true}),
-  onClose: () => set({isOpen: false}),
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
 }));
 

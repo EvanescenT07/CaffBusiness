@@ -8,7 +8,7 @@ const SetupPage = () => {
     const isOpen = modalHooks((state) => state.isOpen)
 
     useEffect(() => {
-        if(!isOpen) {
+        if (!isOpen) {
             onOpen()
         }
     }, [isOpen, onOpen])
