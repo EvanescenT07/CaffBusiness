@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server"
 import { query, collection, where, getDocs } from "firebase/firestore"
 import { redirect } from "next/navigation"
 import { Business } from "@/types-db"
+import Navbar from "@/components/navbar/navbar"
 
 interface DashboardLayoutProps {
     children: React.ReactNode,
@@ -28,6 +29,7 @@ const DashboardLayout = async ({ children, params }: DashboardLayoutProps) => {
 
     businessSnap.forEach(doc => {
         business = doc.data() as Business;
+        return;
     });
 
     if (!business) {
@@ -35,10 +37,11 @@ const DashboardLayout = async ({ children, params }: DashboardLayoutProps) => {
     }
 
     return (
-        <div className="">
-            This is the Navbar : {params.businessId}
+        <>
+            <Navbar />
             {children}
-        </div>
+        </>
+        
     )
 }
 
