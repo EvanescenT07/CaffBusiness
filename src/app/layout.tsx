@@ -9,6 +9,7 @@ import {
 } from '@clerk/nextjs'
 import { ModalProvider } from "@/providers/modal-provider";
 import './globals.css'
+import { ToastProvider } from "@/providers/toast-provider";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["100", '200', '300', '400', '500', '600', '700', '800', '900'] });
 
@@ -33,6 +34,7 @@ export default function RootLayout({
             <UserButton />
           </SignedIn>
           <ModalProvider />
+          <ToastProvider />
           {children}
         </body>
       </html>

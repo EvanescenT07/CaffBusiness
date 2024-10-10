@@ -1,7 +1,6 @@
 "use client";
-import { Modal } from "@/components/modal";
 import { modalHooks } from "@/hooks/modal-hooks";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 const SetupPage = () => {
     const onOpen = modalHooks((state) => state.onOpen)

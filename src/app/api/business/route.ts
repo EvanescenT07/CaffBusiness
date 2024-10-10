@@ -15,29 +15,29 @@ export const POST = async (reqs: Request) => {
         const { name } = body
 
         if (!name) {
-            return new NextResponse("Store Name is Missing", { status: 400 })
+            return new NextResponse("Business Name is Missing", { status: 400 })
         }
 
-        const storeData = {
+        const businessData = {
             name,
             userId,
             createdAt: serverTimestamp()
         }
 
-        const storeRef = await addDoc(collection(db, "stores"), storeData);
+        const businessRef = await addDoc(collection(db, "business"), businessData);
 
-        const id = storeRef.id
+        const id = businessRef.id
 
-        await updateDoc(doc(db, "stores", id), {
-            ...storeData,
+        await updateDoc(doc(db, "business", id), {
+            ...businessData,
             id,
             upadatedAt: serverTimestamp()
         })
 
-        return NextResponse.json({ id, ...storeData })
+        return NextResponse.json({ id, ...businessData })
 
     } catch (error) {
-        console.log(`STORES POST ERROR: ${error}`)
+        console.log(`Business POST ERROR: ${error}`)
         return new NextResponse("Internal Server Error", { status: 500 })
     }
 }

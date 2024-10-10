@@ -10,6 +10,7 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios"
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
     name: z.string().min(3, { message: "Business name must be more than 3 characters" })
@@ -29,10 +30,11 @@ export const StoreModal = () => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setIsLoading(true)
-            const response = await axios.post("/api/stores", values);
+            const response = await axios.post("/api/business", values);
+            toast.success("Business created successfully")
             console.log(response)
         } catch (error) {
-            console.log(error)
+            toast.error("Something went wrong")
         } finally {
             setIsLoading(false)
         }
