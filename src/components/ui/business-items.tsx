@@ -1,11 +1,16 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { BriefcaseBusinessIcon, Check, Store } from "lucide-react"
+import { BriefcaseBusinessIcon, Check } from "lucide-react"
+
+interface BusinessProps {
+    label: string
+    value: string
+}
 
 interface BusinessItemsProps {
-    business : any,
-    onSelect : (business : any) => void,
+    business : BusinessProps,
+    onSelect : (business : BusinessProps) => void,
     isChecked : boolean
 }
 

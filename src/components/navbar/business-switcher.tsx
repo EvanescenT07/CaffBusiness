@@ -4,10 +4,8 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
-  CommandItem,
   CommandList,
-  CommandSeparator
+  CommandSeparator,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -19,17 +17,10 @@ import { cn } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  BriefcaseBusinessIcon,
-  Check,
-  ChevronsUpDown,
-  Search,
-} from "lucide-react";
-import { set } from "react-hook-form";
+import { BriefcaseBusinessIcon, ChevronsUpDown } from "lucide-react";
 import { BusinessItems } from "@/components/ui/business-items";
 import { modalHooks } from "@/hooks/modal-hooks";
 import { CreateNewBusinessItem } from "../business/new-business";
-
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -41,7 +32,7 @@ interface BusinessSwitcherProps extends PopoverTriggerProps {
 export const BusinessSwitcher = ({ items }: BusinessSwitcherProps) => {
   const params = useParams();
   const router = useRouter();
-  const useModalHooks = modalHooks()
+  const useModalHooks = modalHooks();
   const [open, setOpen] = useState(false);
   const [searchTerms, setSearchTerms] = useState("");
   const [filteredBusiness, setFilteredBusiness] = useState<
@@ -57,7 +48,7 @@ export const BusinessSwitcher = ({ items }: BusinessSwitcherProps) => {
     (item) => item.value === params.businessId
   );
 
-  const handleSearch = (event: any) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerms(event.target.value);
     setFilteredBusiness(
       formattedBusiness.filter((items) =>
@@ -129,10 +120,10 @@ export const BusinessSwitcher = ({ items }: BusinessSwitcherProps) => {
           <CommandList>
             <CommandGroup>
               <CreateNewBusinessItem
-              onClick={() => {
-                setOpen(false);
-                useModalHooks.onOpen();
-              }}
+                onClick={() => {
+                  setOpen(false);
+                  useModalHooks.onOpen();
+                }}
               />
             </CommandGroup>
           </CommandList>

@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase"
-import { auth } from "@clerk/nextjs/server"
+import { auth, currentUser } from "@clerk/nextjs/server"
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore"
 import { NextResponse } from "next/server"
 
@@ -7,6 +7,7 @@ export const POST = async (reqs: Request) => {
     try {
         const { userId } = auth()
         const body = await reqs.json()
+        const user = await currentUser()
 
         if (!userId) {
             return new NextResponse("UnAuthorized", { status: 401 })
@@ -18,9 +19,14 @@ export const POST = async (reqs: Request) => {
             return new NextResponse("Business Name is Missing", { status: 400 })
         }
 
+        const businessOwner = user?.firstName && user?.lastName ?
+        `${user?.firstName} ${user?.lastName}` : user?.username 
+
         const businessData = {
             name,
+            BusinessOwner: businessOwner,
             userId,
+            status: "active",
             createdAt: serverTimestamp()
         }
 
