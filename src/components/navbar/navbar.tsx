@@ -19,7 +19,7 @@ const Navbar = async () => {
         where("userId", "==", userId))
     )
 
-    let businesses = [] as Business[];
+    const businesses = [] as Business[];
     
     businessSnap.forEach((doc) => {
         businesses.push({ id: doc.id, ...doc.data() } as Business)
