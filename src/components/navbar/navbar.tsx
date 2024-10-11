@@ -3,7 +3,7 @@ import MainNav from "@/components/navbar/main-nav";
 import { BusinessSwitcher } from "@/components/navbar/business-switcher";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { collection, doc, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Business } from "@/types-db";
 
@@ -19,16 +19,16 @@ const Navbar = async () => {
         where("userId", "==", userId))
     )
 
-    let business = [] as Business[];
+    let businesses = [] as Business[];
     
-    businessSnap.forEach(doc => {
-        business.push(doc.data() as Business)
+    businessSnap.forEach((doc) => {
+        businesses.push({ id: doc.id, ...doc.data() } as Business)
     })
 
     return(
         <div className="border-b">
             <div className="flex h-16 items-center px-4">
-                <BusinessSwitcher businessList={[business]} />
+                <BusinessSwitcher items={businesses} />
                 <MainNav />
                 <div className="ml-auto items-center">
                     <UserButton showName afterSwitchSessionUrl="/" />
@@ -39,3 +39,5 @@ const Navbar = async () => {
 }
 
 export default Navbar;
+
+

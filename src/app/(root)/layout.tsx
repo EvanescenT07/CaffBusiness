@@ -27,8 +27,6 @@ const SetLayout = async ({ children }: SetLayoutProps) => {
         return; 
     });
 
-    console.log(business);
-
     if (business) {
         redirect(`/${business.id}`);
     }

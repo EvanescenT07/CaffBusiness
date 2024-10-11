@@ -1,7 +1,18 @@
 "use client";
 
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Business } from "@/types-db";
 import { cn } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
@@ -9,43 +20,49 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 
-
-type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>;
+type PopoverTriggerProps = React.ComponentPropsWithoutRef<
+  typeof PopoverTrigger
+>;
 interface BusinessSwitcherProps extends PopoverTriggerProps {
-    businessList : Business[]
+  items: Business[];
 }
 
-export const BusinessSwitcher = ({businessList} :  BusinessSwitcherProps) => {
-    const params = useParams();
-    const router = useRouter();
+export const BusinessSwitcher = ({
+  items,
+  className,
+}: BusinessSwitcherProps) => {
+  const params = useParams();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
 
-    const formatBusiness = businessList.map(business => ({
-        label : business.name,
-        value: business.id
-    }));
+  const formattedBusiness = items.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
 
-    const currentBusiness = formatBusiness?.find(
-        business => business.value === params.businessId
-        );
-    const [businessValue, setBusinessValue] = useState(false);
+  const currentBusiness = formattedBusiness.find(
+    (item) => item.value === params.businessId
+  );
 
-    const onBusinessSelect = (business : {value : string, label : string}) => {
-        setBusinessValue(false)
-        router.push(`/${business.value}`)
-    }
+  const onBusinessSelect = (business: { value: string; label: string }) => {
+    setOpen(false);
+    router.push(`/${business.value}`);
+  };
 
-    return(
-    <Popover open={businessValue} onOpenChange={setBusinessValue}>
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
-          aria-expanded={businessValue}
-          className="w-[200px] justify-between"
+          aria-expanded={open}
+          className={cn("w-[200px] justify-between", className)}
         >
           {currentBusiness?.value
-            ? formatBusiness.find((framework) => framework.value === currentBusiness.value)?.label
-            : "Select Business"}
+            ? formattedBusiness.find(
+                (business) => business.value === currentBusiness.value
+              )?.label
+            : "Select business..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -55,19 +72,17 @@ export const BusinessSwitcher = ({businessList} :  BusinessSwitcherProps) => {
           <CommandList>
             <CommandEmpty>No Business found</CommandEmpty>
             <CommandGroup>
-              {formatBusiness?.map((business) => (
+              {formattedBusiness.map((business) => (
                 <CommandItem
                   key={business.value}
-                  value={business.value}
-                  onSelect={(currentValue) => {
-                    // setValue(currentValue === value ? "" : currentValue)
-                    setBusinessValue(false)
-                  }}
+                  onSelect={() => onBusinessSelect(business)}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      currentBusiness?.value === business.value ? "opacity-100" : "opacity-0"
+                      currentBusiness?.value === business.value
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
                   {business.label}
@@ -78,5 +93,5 @@ export const BusinessSwitcher = ({businessList} :  BusinessSwitcherProps) => {
         </Command>
       </PopoverContent>
     </Popover>
-    )
-}
+  );
+};
