@@ -11,4 +11,3 @@ export const modalHooks = create<modalHooksProps>((set) => ({
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
 }));
-
