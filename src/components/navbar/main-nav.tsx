@@ -13,6 +13,11 @@ const MainNav = ({
 
   const routes = [
     {
+      href: `/${params.businessId}/overview`,
+      label: "Overview",
+      active: path === `${params.businessId}/overview`,
+    },
+    {
       href: `/${params.businessId}/settings`,
       label: "Settings",
       active: path === `${params.businessId}/settings`,

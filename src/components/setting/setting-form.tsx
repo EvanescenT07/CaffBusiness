@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { AlertDeleteModal } from "@/components/modal/alert-delete-modal";
+import { ApiComponent } from "@/components/api/api-component";
 
 interface SettingFormProps {
   initialData: Business;
@@ -141,6 +142,9 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
           </div>
         </form>
       </Form>
+
+      <Separator />
+      <ApiComponent title="testing" description="testing description" variant="public" />
     </>
   );
 };
