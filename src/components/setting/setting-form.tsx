@@ -3,7 +3,7 @@
 import { Business } from "@/types-db";
 import { Heading } from "@/components/header/heading";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -128,17 +128,10 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
           </div>
 
           <div className="space-x-2 flex items-center  w-full">
-            <Button
-              disabled={isLoading}
-              typeof="button"
-              variant={"outline"}
-              size={"sm"}
-            >
-              Cancel
-            </Button>
-            <Button disabled={isLoading} typeof="submit" size={"sm"}>
+            <Button disabled={isLoading} typeof="submit" variant={"default"} size={"sm"}>
               Save Changes
             </Button>
+
           </div>
         </form>
       </Form>
