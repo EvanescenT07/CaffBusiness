@@ -30,6 +30,12 @@ interface SettingFormProps {
   initialData: Business;
 }
 
+interface BusinessDataProps {
+  name: string;
+  BusinessOwner: string;
+  status: string;
+}
+
 const formSchema = z.object({
   name: z
     .string()
@@ -44,7 +50,7 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [businessData, setBusinessData] = useState<any>(null);
+  const [businessData, setBusinessData] = useState<BusinessDataProps | null>(null);
   const params = useParams();
   const router = useRouter();
   const url = useUrlHooks();
@@ -55,7 +61,7 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
         const dataRef = doc(db, "business", params.businessId as string);
         const dataSnap = await getDoc(dataRef);
         if (dataSnap.exists()) {
-          setBusinessData(dataSnap.data());
+          setBusinessData(dataSnap.data() as BusinessDataProps);
         } else {
           toast.error("Business not found");
         }
@@ -71,6 +77,7 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
         `/api/business/${params.businessId}`,
         data
       );
+      console.log(response.data);
       toast.success("Business successfully updated");
       router.refresh();
     } catch {
@@ -85,6 +92,7 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
     try {
       setIsLoading(true);
       const response = await axios.delete(`/api/business/${params.businessId}`);
+      console.log(response.data);
       toast.success("Business successfully deleted");
       router.refresh();
       router.push("/");
