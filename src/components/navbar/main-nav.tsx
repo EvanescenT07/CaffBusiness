@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -30,7 +31,7 @@ const MainNav = ({
           key={route.href}
           href={route.href}
           className={cn(
-            "text-sm font-medium transition-colors hover:text-color-primary",
+            "text-sm font-medium transition-colors hover:text-color-dark dark:hover:text-white",
             route.active
               ? "text-color-dark dark:text-white"
               : "text-muted-foreground"

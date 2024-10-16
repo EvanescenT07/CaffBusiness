@@ -9,20 +9,24 @@ import toast from "react-hot-toast";
 interface apiComponentProps {
     title: string;
     description: string;
-    variant: "public" | "admin";
+    variant: "url" | "name" | "owner" | "status";
 }
 
 const textMap : Record<apiComponentProps["variant"], string> = {
-    public: "Public API",
-    admin: "Admin API",
+    url: "URL",
+    name: "Name",
+    owner: "Owner",
+    status: "Segment",
 }
 
 const variantMap : Record<apiComponentProps["variant"], BadgeProps["variant"]> = {
-    public: "secondary",
-    admin: "destructive",
+    url: "outline",
+    name: "outline",
+    owner: "outline",
+    status: "outline",
 }
 
-export const ApiComponent = ({title, description, variant = "public"} : apiComponentProps) => {
+export const ApiComponent = ({title, description, variant = "url"} : apiComponentProps) => {
 
     const handleCopy = () => {
         navigator.clipboard.writeText(description)

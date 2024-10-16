@@ -3,12 +3,12 @@
 import { Business } from "@/types-db";
 import { Heading } from "@/components/header/heading";
 import { Button } from "@/components/ui/button";
-import { Loader2, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Form,
@@ -22,6 +22,9 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { AlertDeleteModal } from "@/components/modal/alert-delete-modal";
 import { ApiComponent } from "@/components/api/api-component";
+import { useUrlHooks } from "@/hooks/url-hooks";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 interface SettingFormProps {
   initialData: Business;
@@ -41,8 +44,25 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [businessData, setBusinessData] = useState<any>(null);
   const params = useParams();
   const router = useRouter();
+  const url = useUrlHooks();
+
+  useEffect(() => {
+    const fetchBusinessData = async () => {
+      if (params.businessId) {
+        const dataRef = doc(db, "business", params.businessId as string);
+        const dataSnap = await getDoc(dataRef);
+        if (dataSnap.exists()) {
+          setBusinessData(dataSnap.data());
+        } else {
+          toast.error("Business not found");
+        }
+      }
+    }
+    fetchBusinessData();
+  }, [params.businessId])
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -57,6 +77,7 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
+      window.location.reload();
     }
   };
 
@@ -137,7 +158,10 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
       </Form>
 
       <Separator />
-      <ApiComponent title="testing" description="testing description" variant="public" />
+      <ApiComponent title="Business Url" description={`${url}/${params.businessId}`}  variant="url" />
+      <ApiComponent title="Business Name" description={`${businessData?.name}`}  variant="name" />
+      <ApiComponent title="Business Owner" description={`${businessData?.BusinessOwner}`}  variant="owner" />
+      <ApiComponent title="Business Status" description={`${businessData?.status}`}  variant="status" />
     </>
   );
 };

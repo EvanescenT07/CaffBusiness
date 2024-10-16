@@ -15,7 +15,7 @@ const config: Config = {
   				secondary: '#3C5B6F',
   				accent: '#948979',
   				white: '#DFD0B8',
-  				dark: '#222831'
+  				dark: '#28282B'
   			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
