@@ -8,3 +8,11 @@ export interface Business {
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
+
+export interface Catalogs {
+  id: string;
+  label: string;
+  imageUrl: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}

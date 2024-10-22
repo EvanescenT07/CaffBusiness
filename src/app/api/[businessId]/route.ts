@@ -1,13 +1,10 @@
 import { db } from "@/lib/firebase";
 import { Business } from "@/types-db";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import {
-  addDoc,
-  collection,
   deleteDoc,
   doc,
   getDoc,
-  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { NextResponse } from "next/server";

@@ -19,6 +19,11 @@ const MainNav = ({
       active: path === `${params.businessId}/overview`,
     },
     {
+      href: `/${params.businessId}/catalog`,
+      label: "Catalog",
+      active: path === `${params.businessId}/catalog`,
+    },
+    {
       href: `/${params.businessId}/settings`,
       label: "Settings",
       active: path === `${params.businessId}/settings`,
