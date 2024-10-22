@@ -1,12 +1,7 @@
 import { db } from "@/lib/firebase";
 import { Business } from "@/types-db";
 import { auth } from "@clerk/nextjs/server";
-import {
-  deleteDoc,
-  doc,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
 export const PATCH = async (

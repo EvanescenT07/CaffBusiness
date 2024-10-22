@@ -10,7 +10,6 @@ import {
 } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
-
 export const PATCH = async (
   request: Request,
   { params }: { params: { businessId: string; catalogId: string } }
@@ -116,9 +115,9 @@ export const DELETE = async (
 
     await deleteDoc(catalogRef);
 
-    return NextResponse.json({ message : "Catalog Deleted" }); 
+    return NextResponse.json({ message: "Catalog Deleted" });
   } catch (error) {
     console.log(`Business POST ERROR: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
-  }  
+  }
 };

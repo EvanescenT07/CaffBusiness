@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Heading } from "@/components/header/heading";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/datatable/data-table";
 import { CatalogColumn, columns } from "@/components/datatable/column";
 
@@ -20,7 +20,7 @@ export const ClientCatalog = ({ data }: ClientCatalogProps) => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Catalog (0)`}
+          title={`Catalog (${data.length})`}
           description="Manage your Business Catalog"
         />
         <Button
@@ -32,7 +32,7 @@ export const ClientCatalog = ({ data }: ClientCatalogProps) => {
       </div>
 
       <Separator />
-      <DataTable searchKey="label" columns={columns} data={data}/>
+      <DataTable searchKey="label" columns={columns} data={data} />
     </>
   );
 };

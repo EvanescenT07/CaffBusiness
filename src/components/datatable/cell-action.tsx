@@ -42,9 +42,7 @@ export const CellAction = ({ data }: CellActionProps) => {
     try {
       setIsLoading(true);
       await deleteObject(ref(storage, data.imageUrl)).then(async () => {
-        await axios.delete(
-          `/api/${params.businessId}/catalog/${data.id}`
-        );
+        await axios.delete(`/api/${params.businessId}/catalog/${data.id}`);
       });
       router.refresh();
       router.push(`/${params.businessId}/catalog`);

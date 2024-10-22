@@ -8,15 +8,18 @@ const NewCatalogPage = async ({
 }: {
   params: { businessId: string; catalogId: string };
 }) => {
-
-    const catalog = (await getDoc(doc(db, "business", params.businessId, "catalog", params.catalogId))).data() as Catalogs;
+  const catalog = (
+    await getDoc(
+      doc(db, "business", params.businessId, "catalog", params.catalogId)
+    )
+  ).data() as Catalogs;
 
   return (
     <>
       <div className="flex flex-col">
-            <div className="flex-1 space-y-4 p-8">
-                <CatalogForm initialData={catalog} />
-            </div>
+        <div className="flex-1 space-y-4 p-8">
+          <CatalogForm initialData={catalog} />
+        </div>
       </div>
     </>
   );

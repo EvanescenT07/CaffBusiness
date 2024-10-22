@@ -78,10 +78,12 @@ export const GET = async (
     if (!params.businessId) {
       return new NextResponse("Business ID is required", { status: 400 });
     }
-    const catalogData = (await getDocs(
-      collection(doc(db, "business", params.businessId), "catalog")
-    )).docs.map((doc) => doc.data()) as Catalogs[];
-    return NextResponse.json(catalogData)
+    const catalogData = (
+      await getDocs(
+        collection(doc(db, "business", params.businessId), "catalog")
+      )
+    ).docs.map((doc) => doc.data()) as Catalogs[];
+    return NextResponse.json(catalogData);
   } catch (error) {
     console.log(`Business POST ERROR: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });

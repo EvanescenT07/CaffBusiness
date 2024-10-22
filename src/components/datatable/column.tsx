@@ -52,6 +52,6 @@ export const columns: ColumnDef<CatalogColumn>[] = [
   },
   {
     id: "action",
-    cell: ({row}) => <CellAction data={row.original} /> 
-  }
+    cell: ({ row }) => <CellAction data={row.original} />,
+  },
 ];

@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { AlertDeleteModal } from "../modal/alert-delete-modal";
+import { AlertDeleteModal } from "@/components/modal/alert-delete-modal";
 import { Heading } from "@/components/header/heading";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
@@ -57,7 +57,7 @@ export const CatalogForm = ({ initialData }: CatalogFormProps) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      
+
       if (isEditMode && params.catalogId) {
         await axios.patch(
           `/api/${params.businessId}/catalog/${params.catalogId}`,
@@ -66,7 +66,7 @@ export const CatalogForm = ({ initialData }: CatalogFormProps) => {
       } else {
         await axios.post(`/api/${params.businessId}/catalog`, data);
       }
-      
+
       toast.success(toastMessage);
       router.push(`/${params.businessId}/catalog`);
     } catch (error) {
@@ -84,12 +84,12 @@ export const CatalogForm = ({ initialData }: CatalogFormProps) => {
       if (!params.catalogId) return;
 
       const { imageUrl } = form.getValues();
-  
+
       await deleteObject(ref(storage, imageUrl));
       await axios.delete(
         `/api/${params.businessId}/catalog/${params.catalogId}`
       );
-      
+
       toast.success("Catalog successfully deleted");
       router.refresh();
       router.push(`/${params.businessId}/catalog`);
@@ -110,7 +110,7 @@ export const CatalogForm = ({ initialData }: CatalogFormProps) => {
         onConfirm={onDelete}
         loading={isLoading}
       />
-      
+
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {isEditMode && (
@@ -147,7 +147,7 @@ export const CatalogForm = ({ initialData }: CatalogFormProps) => {
               </FormItem>
             )}
           />
-          
+
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
@@ -166,11 +166,7 @@ export const CatalogForm = ({ initialData }: CatalogFormProps) => {
             />
           </div>
 
-          <Button
-            disabled={isLoading}
-            type="submit"
-            className="ml-auto"
-          >
+          <Button disabled={isLoading} type="submit" className="ml-auto">
             {action}
           </Button>
         </form>
