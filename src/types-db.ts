@@ -16,3 +16,13 @@ export interface Catalogs {
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
+
+export interface Category {
+  id: string;
+  catalogId: string;
+  catalogLabel: string;
+  name: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+
+}

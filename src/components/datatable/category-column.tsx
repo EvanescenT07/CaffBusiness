@@ -1,36 +1,41 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { CellImage } from "@/components/datatable/cell-image";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CellAction } from "@/components/datatable/cell-action";
+import { CellAction } from "@/components/category/cell-action";
 
-export type CatalogColumn = {
-  id: string;
-  label: string;
-  imageUrl: string;
-  createdAt: string;
+export type CategoryColumn = {
+  id: string
+  name: string
+  catalogLabel: string
+  createdAt: string
 };
 
-export const columns: ColumnDef<CatalogColumn>[] = [
+export const column: ColumnDef<CategoryColumn>[] = [
   {
-    accessorKey: "imageUrl",
-    header: "Image",
-    cell: ({ row }) => {
-      const { imageUrl } = row.original;
-      return <CellImage imageUrl={imageUrl} />;
-    },
-  },
-  {
-    accessorKey: "label",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          Category
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "catalogLabel",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Catalog
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );

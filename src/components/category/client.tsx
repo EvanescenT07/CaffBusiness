@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/datatable/data-table";
-import { CatalogColumn, columns } from "@/components/datatable/column";
+import { CategoryColumn, column } from "@/components/datatable/category-column";
 
-interface ClientCatalogProps {
-  data: CatalogColumn[];
+interface ClientCategoryProps {
+  data: CategoryColumn[];
 }
 
-export const ClientCatalog = ({ data }: ClientCatalogProps) => {
+export const ClientCategory = ({ data }: ClientCategoryProps) => {
   const params = useParams();
   const router = useRouter();
 
@@ -20,19 +20,19 @@ export const ClientCatalog = ({ data }: ClientCatalogProps) => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Catalog (${data.length})`}
+          title={`Categories (${data.length})`}
           description="Manage your Business Catalog"
         />
         <Button
-          onClick={() => router.push(`/${params.businessId}/catalog/new`)}
+          onClick={() => router.push(`/${params.businessId}/categories/new`)}
         >
           <PlusCircle className="h-4 w-4 mr-2" />
-          Add Product
+          Add Categories
         </Button>
       </div>
 
       <Separator />
-      <DataTable searchKey="label" columns={columns} data={data} />
+      <DataTable searchKey="name" columns={column} data={data} />
     </>
   );
 };

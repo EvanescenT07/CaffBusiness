@@ -1,6 +1,6 @@
 "use client";
 
-import { CatalogColumn } from "@/components/datatable/column";
+import { CatalogColumn } from "@/components/datatable/catalog-column";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import {

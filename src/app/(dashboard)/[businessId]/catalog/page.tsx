@@ -1,5 +1,5 @@
-import { ClientCatalog } from "@/components/catalog/client-catalog";
-import { CatalogColumn } from "@/components/datatable/column";
+import { ClientCatalog } from "@/components/catalog/client";
+import { CatalogColumn } from "@/components/datatable/catalog-column";
 import { db } from "@/lib/firebase";
 import { Catalogs } from "@/types-db";
 import { collection, doc, getDocs } from "firebase/firestore";

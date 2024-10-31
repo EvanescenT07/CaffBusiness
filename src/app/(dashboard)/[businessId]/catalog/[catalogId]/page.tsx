@@ -4,7 +4,7 @@ import { Catalogs } from "@/types-db";
 import { doc, getDoc } from "firebase/firestore";
 
 const NewCatalogPage = async ({
-  params,
+  params
 }: {
   params: { businessId: string; catalogId: string };
 }) => {
