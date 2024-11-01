@@ -134,7 +134,7 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
 
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit) =}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-5"
         >
           <div className="grid grid-cols-3 gap-8">
