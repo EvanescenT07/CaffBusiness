@@ -25,8 +25,13 @@ const MainNav = ({
     },
     {
       href: `/${params.businessId}/categories`,
-      label: "Categories",
+      label: "Category",
       active: path === `${params.businessId}/categories`,
+    },
+    {
+      href: `/${params.businessId}/option`,
+      label: "Option",
+      active: path === `${params.businessId}/option`
     },
     {
       href: `/${params.businessId}/settings`,
@@ -35,13 +40,13 @@ const MainNav = ({
     },
   ];
   return (
-    <div className={cn("flex items-center space-x-4 lg:space-x-6 pl-6")}>
+    <div className={cn("flex items-center space-x-4 lg:space-x-8 pl-6")}>
       {routes.map((route) => (
         <Link
           key={route.href}
           href={route.href}
           className={cn(
-            "text-sm font-medium transition-colors hover:text-color-dark dark:hover:text-white",
+            "text-base font-medium transition-colors hover:text-color-dark dark:hover:text-white",
             route.active
               ? "text-color-dark dark:text-white"
               : "text-muted-foreground"

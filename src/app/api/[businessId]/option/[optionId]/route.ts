@@ -1,5 +1,5 @@
-import { Category } from "@/types-db";
 import { db } from "@/lib/firebase";
+import { Option } from "@/types-db";
 import { auth } from "@clerk/nextjs/server";
 import {
   deleteDoc,
@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 
 export const PATCH = async (
   request: Request,
-  { params }: { params: { businessId: string; categoryId: string } }
+  { params }: { params: { businessId: string; optionId: string } }
 ) => {
   try {
     const { userId } = auth();
@@ -21,66 +21,62 @@ export const PATCH = async (
     if (!userId) {
       return new NextResponse("UnAuthorized", { status: 401 });
     }
+    const { name, value } = body;
 
-    const { name, catalogLabel, catalogId } = body;
-
-    if (!name || !catalogId) {
-      return new NextResponse("Name and Catalog ID are Missing", {
+    if (!name || !value) {
+      return new NextResponse("Name and Value are Missing", {
         status: 400,
       });
     }
-
     if (!params.businessId) {
       return new NextResponse("Business ID is required", { status: 400 });
     }
-    if (!params.categoryId) {
-      return new NextResponse("Category ID is required", { status: 400 });
+    if (!params.optionId) {
+      return new NextResponse("Option ID is required", { status: 400 });
     }
 
-    const businesses = await getDoc(doc(db, "business", params.businessId));
+    const businessess = await getDoc(doc(db, "business", params.businessId));
 
-    if (businesses.exists()) {
-      const businessData = businesses.data();
+    if (businessess.exists()) {
+      const businessData = businessess.data();
       if (businessData?.userId !== userId) {
         return new NextResponse("UnAuthorized Access", { status: 500 });
       }
     }
 
-    const categoryRef = await getDoc(
-      doc(db, "business", params.businessId, "categories", params.categoryId)
+    const optionRef = await getDoc(
+      doc(db, "business", params.businessId, "option", params.optionId)
     );
 
-    if (categoryRef.exists()) {
+    if (optionRef.exists()) {
       await updateDoc(
-        doc(db, "business", params.businessId, "categories", params.categoryId),
+        doc(db, "business", params.businessId, "option", params.optionId),
         {
-          ...categoryRef.data(),
+          ...optionRef.data(),
           name,
-          catalogLabel,
-          catalogId,
+          value,
           updatedAt: serverTimestamp(),
         }
       );
     } else {
-      return new NextResponse("Category not found", { status: 404 });
+      return new NextResponse("Option not found", { status: 400 });
     }
-
-    const category = (
+    const option = (
       await getDoc(
-        doc(db, "business", params.businessId, "catalog", params.categoryId)
+        doc(db, "business", params.businessId, "option", params.optionId)
       )
-    ).data() as Category;
+    ).data() as Option;
 
-    return NextResponse.json({ category });
+    return NextResponse.json({ option });
   } catch (error) {
-    console.log(`Business PATCH ERROR: ${error}`);
+    console.log(`Option PATCH ERROR: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
 
 export const DELETE = async (
   request: Request,
-  { params }: { params: { businessId: string; categoryId: string } }
+  { params }: { params: { businessId: string; optionId: string } }
 ) => {
   try {
     const { userId } = auth();
@@ -93,8 +89,8 @@ export const DELETE = async (
       return new NextResponse("Business ID is required", { status: 400 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Catalog ID is required", { status: 400 });
+    if (!params.optionId) {
+      return new NextResponse("Option ID is required", { status: 400 });
     }
 
     const businesses = await getDoc(doc(db, "business", params.businessId));
@@ -105,19 +101,17 @@ export const DELETE = async (
       }
     }
 
-    const categoryRef = doc(
+    const optionRef = doc(
       db,
       "business",
       params.businessId,
-      "categories",
-      params.categoryId
+      "option",
+      params.optionId
     );
 
-    await deleteDoc(categoryRef);
-
-    return NextResponse.json({ message: "Category Deleted" });
+    await deleteDoc(optionRef);
   } catch (error) {
-    console.log(`Category DELETE ERROR: ${error}`);
+    console.log(`Opton DELETE ERROR: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
