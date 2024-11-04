@@ -21,7 +21,7 @@ export const ClientCategory = ({ data }: ClientCategoryProps) => {
       <div className="flex items-center justify-between">
         <Heading
           title={`Categories (${data.length})`}
-          description="Manage your Business Catalog"
+          description="Manage your Business Category"
         />
         <Button
           onClick={() => router.push(`/${params.businessId}/categories/new`)}

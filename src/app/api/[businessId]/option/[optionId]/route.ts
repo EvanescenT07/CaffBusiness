@@ -110,6 +110,8 @@ export const DELETE = async (
     );
 
     await deleteDoc(optionRef);
+
+    return NextResponse.json({msg : "Option Deleted"})
   } catch (error) {
     console.log(`Opton DELETE ERROR: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });

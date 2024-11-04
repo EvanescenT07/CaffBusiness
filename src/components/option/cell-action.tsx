@@ -29,23 +29,22 @@ export const CellAction = ({ data }: CellActionProps) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Category ID copied to clipboard");
+    toast.success("Option ID copied to clipboard");
   };
 
   const onEdit = () => {
-    router.push(`/${params.businessId}/categories/${data.id}`);
+    router.push(`/${params.businessId}/option/${data.id}`);
   };
 
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/api/${params.businessId}/categories/${data.id}`);
-
+      await axios.delete(`/api/${params.businessId}/option/${data.id}`);
       router.refresh();
-      router.push(`/${params.businessId}/categories`);
-      toast.success("Category deleted");
+      router.push(`/${params.businessId}/option`);
+      toast.success("Option deleted");
     } catch (error) {
-      console.error("Error deleting category:", error);
+      console.error("Error deleting option:", error);
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
