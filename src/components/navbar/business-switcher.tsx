@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { BriefcaseBusinessIcon, ChevronsUpDown } from "lucide-react";
 import { BusinessItems } from "@/components/ui/business-items";
 import { modalHooks } from "@/hooks/modal-hooks";
-import { CreateNewBusinessItem } from "../business/new-business";
+import { CreateNewBusinessItem } from "@/components/business/new-business";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger

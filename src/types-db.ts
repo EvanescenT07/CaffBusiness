@@ -33,3 +33,11 @@ export interface Option {
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
+
+export interface Detail {
+  id: string;
+  name: string;
+  value: string;
+  createdAt? : Timestamp;
+  updatedAt? : Timestamp;
+}

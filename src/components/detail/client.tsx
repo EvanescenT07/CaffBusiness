@@ -1,35 +1,35 @@
 "use client";
 
+import { DetailColumn, column } from "@/components/datatable/detail-column";
 import { useParams, useRouter } from "next/navigation";
 import { Heading } from "@/components/header/heading";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { OptionColumm, column } from "@/components/datatable/option-column";
 import { DataTable } from "@/components/datatable/data-table";
 
-interface ClientOptionProps {
-  data: OptionColumm[];
+interface ClientDetailProps {
+  data: DetailColumn[];
 }
 
-export const OptionClient = ({ data }: ClientOptionProps) => {
+export const DetailClient = ({ data }: ClientDetailProps) => {
   const params = useParams();
   const router = useRouter();
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-center">
         <Heading
-          title={`Option (${data.length})`}
-          description="Add your Option"
+          title={`Detail (${data.length})`}
+          description="Add your Detail"
         />
-        <Button onClick={() => router.push(`/${params.businessId}/option/new`)}>
+        <Button onClick={() => router.push(`/${params.businessId}/detail/new`)}>
           <PlusCircle className="h-4 w-4 mr-2" />
-          Add Option
+          Add Detail
         </Button>
       </div>
 
-      <Separator />
+      <Separator/>
       <DataTable searchKey="name" columns={column} data={data} />
     </>
   );

@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { Option } from "@/types-db";
+import { Detail } from "@/types-db";
 import { auth } from "@clerk/nextjs/server";
 import {
   addDoc,
@@ -27,9 +27,7 @@ export const POST = async (
     const { name, value } = body;
 
     if (!name || !value) {
-      return new NextResponse("Name and Value are missing", {
-        status: 400,
-      });
+      return new NextResponse("Name and Value are missing", { status: 400 });
     }
 
     if (!params.businessId) {
@@ -44,27 +42,28 @@ export const POST = async (
       }
     }
 
-    const optionData = {
+    const detailData = {
       name,
       value,
       createdAt: serverTimestamp(),
     };
 
-    const optionRef = await addDoc(
-      collection(db, "business", params.businessId, "option"),
-      optionData
+    const detailRef = await addDoc(
+      collection(db, "business", params.businessId, "detail"),
+      detailData
     );
 
-    const id = optionRef.id;
+    const id = detailRef.id;
 
-    await updateDoc(doc(db, "business", params.businessId, "option", id), {
-      ...optionData,
+    await updateDoc(doc(db, "business", params.businessId, "detail", id), {
+      ...detailData,
       id,
-      updateaAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
-    return NextResponse.json({ id, ...optionData });
+
+    return NextResponse.json({ id, ...detailData });
   } catch (error) {
-    console.log(`Option POST ERROR: ${error}`);
+    console.log(`Detail POST ERROR: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
@@ -73,18 +72,19 @@ export const GET = async (
   request: Request,
   { params }: { params: { businessId: string } }
 ) => {
-  try {
-    if (!params.businessId) {
-      return new NextResponse("Business ID is required", { status: 400 });
+    try {
+        if (!params.businessId) {
+            return new NextResponse("Business ID is required", { status: 400});
+        }
+
+        const detailData = (
+            await getDocs(
+                collection(doc(db, "business", params.businessId), "detail")
+            )
+        ).docs.map((doc) => doc.data() as Detail[]);
+        return NextResponse.json(detailData);
+    } catch (error) {
+        console.log(`Detail GET Error: ${error}`);
+        return new NextResponse("Internal Server Error", { status: 500});
     }
-    const optionData = (
-      await getDocs(
-        collection(doc(db, "business", params.businessId), "option")
-      )
-    ).docs.map((doc) => doc.data()) as Option[];
-    return NextResponse.json(optionData);
-  } catch (error) {
-    console.log(`Option GET Error: ${error}`);
-    return new NextResponse("Internal Server Error", { status: 500 });
-  }
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { Option } from "@/types-db";
+import { Detail } from "@/types-db";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { AlertDeleteModal } from "../modal/alert-delete-modal";
+import { AlertDeleteModal } from "@/components/modal/alert-delete-modal";
 import { Heading } from "@/components/header/heading";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
@@ -22,16 +22,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-interface OptionFormProps {
-  initialData: Option;
+interface DetailFormProps {
+  initialData: Detail;
 }
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Option Name is required" }),
-  value: z.string().min(1, { message: "Option Value is required" }),
+  name: z.string().min(1, { message: "Detail Name is required" }),
+  value: z.string().min(1, { message: "Detail Value is required" }),
 });
 
-export const OptionForm = ({ initialData }: OptionFormProps) => {
+export const DetailForm = ({ initialData }: DetailFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
@@ -44,26 +44,25 @@ export const OptionForm = ({ initialData }: OptionFormProps) => {
 
   const isEditMode = Boolean(initialData);
 
-  const title = isEditMode ? "Edit Option" : "Add Option";
-  const description = isEditMode ? "Edit your Option" : "Add your new Option";
+  const title = isEditMode ? "Edit Detail" : "Add Detail";
+  const description = isEditMode ? "Edit your Detail" : "Add your new Detail";
   const toastMessage = isEditMode
-    ? "Option successfully updated"
-    : "Option successfully created";
-  const action = isEditMode ? "Save Changes" : "Create Option";
+    ? "Detail successfully updated"
+    : "Detail successfully created";
+  const action = isEditMode ? "Save Changes" : "Create Detail";
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      if (isEditMode && params.optionId) {
+      if (isEditMode && params.detailId) {
         await axios.patch(
-          `/api/${params.businessId}/option/${params.optionId}`,
+          `/api/${params.businessId}/detail/${params.detailId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.businessId}/option`, data);
+        await axios.post(`/api/${params.businessId}/detail`, data);
       }
       toast.success(toastMessage);
-      router.push(`/${params.businessId}/option`);
     } catch (error) {
       console.error("Error submitting form: ", error);
       toast.error("Something went wrong");
@@ -76,13 +75,13 @@ export const OptionForm = ({ initialData }: OptionFormProps) => {
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      if (!params.optionId) return;
-      await axios.delete(`api/${params.businessId}/option/${params.optionId}`);
-      toast.success("Option successfully deleted");
+      if (!params.detailId) return;
+      await axios.delete(`api/${params.businessId}/detail/${params.detailId}`);
+      toast.success("Detail successfully deleted");
       router.refresh();
-      router.push(`/${params.businessId}/option`);
+      router.push(`/${params.businessId}/detail`);
     } catch (error) {
-      console.error("Error deleting option: ", error);
+      console.error("Error deleting detail ", error);
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
@@ -126,10 +125,10 @@ export const OptionForm = ({ initialData }: OptionFormProps) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Option Name</FormLabel>
+                  <FormLabel>Detail Name</FormLabel>
                   <Input
                     disabled={isLoading}
-                    placeholder="Your Option Name"
+                    placeholder="Your Detail Name"
                     {...field}
                   />
                   <FormMessage />
@@ -142,10 +141,10 @@ export const OptionForm = ({ initialData }: OptionFormProps) => {
               name="value"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Option Value</FormLabel>
+                  <FormLabel>Detail Value</FormLabel>
                   <Input
                     disabled={isLoading}
-                    placeholder="Your Option Value"
+                    placeholder="Your Detail Value"
                     {...field}
                   />
                   <FormMessage />

@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { Option } from "@/types-db";
+import { Detail } from "@/types-db";
 import { auth } from "@clerk/nextjs/server";
 import {
   deleteDoc,
@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 
 export const PATCH = async (
   request: Request,
-  { params }: { params: { businessId: string; optionId: string } }
+  { params }: { params: { businessId: string; detailId: string } }
 ) => {
   try {
     const { userId } = auth();
@@ -28,11 +28,12 @@ export const PATCH = async (
         status: 400,
       });
     }
+
     if (!params.businessId) {
       return new NextResponse("Business ID is required", { status: 400 });
     }
-    if (!params.optionId) {
-      return new NextResponse("Option ID is required", { status: 400 });
+    if (!params.detailId) {
+      return new NextResponse("Detail ID is required", { status: 400 });
     }
 
     const businessess = await getDoc(doc(db, "business", params.businessId));
@@ -44,39 +45,39 @@ export const PATCH = async (
       }
     }
 
-    const optionRef = await getDoc(
-      doc(db, "business", params.businessId, "option", params.optionId)
+    const detailRef = await getDoc(
+      doc(db, "business", params.businessId, "detail", params.detailId)
     );
 
-    if (optionRef.exists()) {
+    if (detailRef.exists()) {
       await updateDoc(
-        doc(db, "business", params.businessId, "option", params.optionId),
+        doc(db, "business", params.businessId, "detail", params.detailId),
         {
-          ...optionRef.data(),
+          ...detailRef.data(),
           name,
           value,
           updatedAt: serverTimestamp(),
         }
       );
     } else {
-      return new NextResponse("Option not found", { status: 400 });
+      return new NextResponse("Detail not found", { status: 400 });
     }
-    const option = (
+    const detail = (
       await getDoc(
-        doc(db, "business", params.businessId, "option", params.optionId)
+        doc(db, "business", params.businessId, "detail", params.detailId)
       )
-    ).data() as Option;
+    ).data() as Detail;
 
-    return NextResponse.json({ option });
+    return NextResponse.json({ detail });
   } catch (error) {
-    console.log(`Option PATCH Error: ${error}`);
+    console.log(`Detail PATCH Error: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
 
 export const DELETE = async (
   request: Request,
-  { params }: { params: { businessId: string; optionId: string } }
+  { params }: { params: { businessId: string; detailId: string } }
 ) => {
   try {
     const { userId } = auth();
@@ -89,8 +90,8 @@ export const DELETE = async (
       return new NextResponse("Business ID is required", { status: 400 });
     }
 
-    if (!params.optionId) {
-      return new NextResponse("Option ID is required", { status: 400 });
+    if (!params.detailId) {
+      return new NextResponse("Detail ID is required", { status: 400 });
     }
 
     const businesses = await getDoc(doc(db, "business", params.businessId));
@@ -101,19 +102,19 @@ export const DELETE = async (
       }
     }
 
-    const optionRef = doc(
+    const detailRef = doc(
       db,
       "business",
       params.businessId,
       "option",
-      params.optionId
+      params.detailId
     );
 
-    await deleteDoc(optionRef);
+    await deleteDoc(detailRef);
 
-    return NextResponse.json({msg : "Option Deleted"})
+    return NextResponse.json({ msg: "Detail Deleted" });
   } catch (error) {
-    console.log(`Opton DELETE Error: ${error}`);
+    console.log(`Detail DELETE Error: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
