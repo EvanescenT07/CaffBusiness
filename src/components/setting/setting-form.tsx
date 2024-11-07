@@ -74,7 +74,7 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
     try {
       setIsLoading(true);
       const response = await axios.patch(
-        `/api/business/${params.businessId}`,
+        `/api/${params.businessId}`,
         data
       );
       console.log(response.data);
@@ -91,8 +91,7 @@ export const SettingForm = ({ initialData }: SettingFormProps) => {
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.delete(`/api/business/${params.businessId}`);
-      console.log(response.data);
+      await axios.delete(`/api/${params.businessId}`);
       toast.success("Business successfully deleted");
       router.refresh();
     } catch {

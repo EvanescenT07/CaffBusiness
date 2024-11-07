@@ -24,7 +24,7 @@ export const PATCH = async (
     const { name, value } = body;
 
     if (!name || !value) {
-      return new NextResponse("Name and Value are Missing", {
+      return new NextResponse("Name and Value are missing", {
         status: 400,
       });
     }
@@ -111,7 +111,7 @@ export const DELETE = async (
 
     await deleteDoc(optionRef);
 
-    return NextResponse.json({msg : "Option Deleted"})
+    return NextResponse.json({ msg: "Option Deleted" });
   } catch (error) {
     console.log(`Opton DELETE Error: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });

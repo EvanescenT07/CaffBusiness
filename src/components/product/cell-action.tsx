@@ -1,6 +1,4 @@
-"use client";
-
-import { DetailColumn } from "@/components/datatable/detail-column";
+import { ProductColumn } from "@/components/datatable/product-column";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -17,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, Edit, MoreVerticalIcon, Trash } from "lucide-react";
 
 interface CellActionProps {
-  data: DetailColumn;
+  data: ProductColumn;
 }
 
 export const CellAction = ({ data }: CellActionProps) => {
@@ -29,27 +27,27 @@ export const CellAction = ({ data }: CellActionProps) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Detail ID copied to clipboard");
+    toast.success("Product ID copied to clipboard");
   };
 
   const onEdit = () => {
-    router.push(`/${params.businessId}/detail/${data.id}`);
+    router.push(`/${params.businessId}/product/${data.id}`);
   };
 
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/api/${params.businessId}/detail/${data.id}`);
+      await axios.delete(`/api/${params.businessId}/product/${data.id}`);
       router.refresh();
-      router.push(`/${params.businessId}/detail`);
-      toast.success("Detail deleted");
+      router.push(`/${params.businessId}/product`);
+      toast.success("Product deleted");
     } catch (error) {
-      console.error("Error deleting option: ", error);
+      console.error("Error deleting product: ", error);
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
       setIsOpen(false);
-      router.refresh();
+      router.refresh()
     }
   };
 

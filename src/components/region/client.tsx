@@ -1,6 +1,6 @@
 "use client";
 
-import { DetailColumn, column } from "@/components/datatable/detail-column";
+import { RegionColumn, column } from "@/components/datatable/region-column";
 import { useParams, useRouter } from "next/navigation";
 import { Heading } from "@/components/header/heading";
 import { Button } from "@/components/ui/button";
@@ -8,11 +8,11 @@ import { PlusCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/datatable/data-table";
 
-interface ClientDetailProps {
-  data: DetailColumn[];
+interface ClientRegionProps {
+  data: RegionColumn[];
 }
 
-export const DetailClient = ({ data }: ClientDetailProps) => {
+export const RegionClient = ({ data }: ClientRegionProps) => {
   const params = useParams();
   const router = useRouter();
 
@@ -20,12 +20,12 @@ export const DetailClient = ({ data }: ClientDetailProps) => {
     <>
       <div className="flex items-center justify-center">
         <Heading
-          title={`Detail (${data.length})`}
-          description="Add your detail"
+          title={`Region (${data.length})`}
+          description="Add your business region"
         />
-        <Button onClick={() => router.push(`/${params.businessId}/detail/new`)}>
+        <Button onClick={() => router.push(`/${params.businessId}/region/new`)}>
           <PlusCircle className="h-4 w-4 mr-2" />
-          Add Detail
+          Add Region
         </Button>
       </div>
 

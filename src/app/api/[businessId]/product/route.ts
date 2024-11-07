@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { Catalogs } from "@/types-db";
+import { Product } from "@/types-db";
 import { auth } from "@clerk/nextjs/server";
 import {
   addDoc,
@@ -24,12 +24,28 @@ export const POST = async (
       return new NextResponse("UnAuthorized", { status: 401 });
     }
 
-    const { label, imageUrl } = body;
+    const { 
+      name,
+      price,
+      image,
+      isActive,
+      category,
+      option,
+      detail,
+      region,
+     } =
+      body;
 
-    if (!label || !imageUrl) {
-      return new NextResponse("Label and Image URL are Missing", {
-        status: 400,
-      });
+    if (
+      !name ||
+      !price ||
+      !image ||
+      !category ||
+      !option ||
+      !detail ||
+      !region
+    ) {
+      return new NextResponse("Bad Request", { status: 400 });
     }
 
     if (!params.businessId) {
@@ -38,34 +54,40 @@ export const POST = async (
 
     const businesses = await getDoc(doc(db, "business", params.businessId));
     if (businesses.exists()) {
-      const businessData = businesses.data();
-      if (businessData?.userId !== userId) {
+      const businessesData = businesses.data();
+      if (businessesData?.userId !== userId) {
         return new NextResponse("UnAuthorized Access", { status: 500 });
       }
     }
 
-    const catalogData = {
-      label,
-      imageUrl,
+    const productData = {
+      name,
+      image,
+      price,
+      isActive,
+      category,
+      option,
+      detail,
+      region,
       createdAt: serverTimestamp(),
     };
 
-    const catalogRef = await addDoc(
-      collection(db, "business", params.businessId, "catalog"),
-      catalogData
+    const productRef = await addDoc(
+      collection(db, "business", params.businessId, "product"),
+      productData
     );
 
-    const id = catalogRef.id;
+    const id = productRef.id;
 
-    await updateDoc(doc(db, "business", params.businessId, "catalog", id), {
-      ...catalogData,
+    await updateDoc(doc(db, "business", params.businessId, "product", id), {
+      ...productData,
       id,
       updatedAt: serverTimestamp(),
     });
 
-    return NextResponse.json({ id, ...catalogData }, { status: 201 });
+    return NextResponse.json({ id, ...productData }, { status: 201 });
   } catch (error) {
-    console.log(`Business POST ERROR: ${error}`);
+    console.log(`Product POST ERROR: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
@@ -78,14 +100,15 @@ export const GET = async (
     if (!params.businessId) {
       return new NextResponse("Business ID is required", { status: 400 });
     }
-    const catalogData = (
+
+    const productData = (
       await getDocs(
-        collection(doc(db, "business", params.businessId), "catalog")
+        collection(doc(db, "business", params.businessId), "product")
       )
-    ).docs.map((doc) => doc.data()) as Catalogs[];
-    return NextResponse.json(catalogData, { status: 200 });
+    ).docs.map((doc) => doc.data()) as Product[];
+    return NextResponse.json(productData, { status: 200 });
   } catch (error) {
-    console.log(`Business POST ERROR: ${error}`);
+    console.log(`Product GET ERROR: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };

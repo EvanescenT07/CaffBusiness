@@ -1,6 +1,6 @@
 "use client";
 
-import { Detail } from "@/types-db";
+import { Region } from "@/types-db";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
@@ -22,16 +22,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-interface DetailFormProps {
-  initialData: Detail;
+interface RegionFormProps {
+  initialData: Region;
 }
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Detail Name is required" }),
-  value: z.string().min(1, { message: "Detail Value is required" }),
+  name: z.string().min(1, { message: "Region Name is required" }),
+  value: z.string().min(1, { message: "Value Name is required" }),
 });
 
-export const DetailForm = ({ initialData }: DetailFormProps) => {
+export const RegionForm = ({ initialData }: RegionFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
@@ -44,23 +44,23 @@ export const DetailForm = ({ initialData }: DetailFormProps) => {
 
   const isEditMode = Boolean(initialData);
 
-  const title = isEditMode ? "Edit Detail" : "Add Detail";
-  const description = isEditMode ? "Edit your Detail" : "Add your new Detail";
+  const title = isEditMode ? "Edit Region" : "Add Region";
+  const description = isEditMode ? "Edit your Region" : "Add your new Region";
   const toastMessage = isEditMode
-    ? "Detail successfully updated"
-    : "Detail successfully created";
-  const action = isEditMode ? "Save Changes" : "Create Detail";
+    ? "Region successfully updated"
+    : "Region successfully created";
+  const action = isEditMode ? "Save Changes" : "Create Region";
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      if (isEditMode && params.detailId) {
+      if (isEditMode && params.regionId) {
         await axios.patch(
-          `/api/${params.businessId}/detail/${params.detailId}`,
+          `/api/${params.businessId}/region/${params.regionId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.businessId}/detail`, data);
+        await axios.post(`/api/${params.businessId}/region`, data);
       }
       toast.success(toastMessage);
     } catch (error) {
@@ -68,20 +68,20 @@ export const DetailForm = ({ initialData }: DetailFormProps) => {
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
-      router.refresh();
+      router.refresh()
     }
   };
 
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      if (!params.detailId) return;
-      await axios.delete(`/api/${params.businessId}/detail/${params.detailId}`);
-      toast.success("Detail successfully deleted");
+      if (!params.regionId) return;
+      await axios.delete(`/api/${params.businessId}/region/${params.regionId}`);
+      toast.success("Region successfully deleted");
       router.refresh();
-      router.push(`/${params.businessId}/detail`);
+      router.push(`/${params.businessId}/region`);
     } catch (error) {
-      console.error("Error deleting detail ", error);
+      console.error("Error deleting region ", error);
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
@@ -125,10 +125,10 @@ export const DetailForm = ({ initialData }: DetailFormProps) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Detail Name</FormLabel>
+                  <FormLabel>Region Name</FormLabel>
                   <Input
                     disabled={isLoading}
-                    placeholder="Your Detail name"
+                    placeholder="Your Region name"
                     {...field}
                   />
                   <FormMessage />
@@ -141,10 +141,10 @@ export const DetailForm = ({ initialData }: DetailFormProps) => {
               name="value"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Detail Value</FormLabel>
+                  <FormLabel>Region Value</FormLabel>
                   <Input
                     disabled={isLoading}
-                    placeholder="Your Detail value"
+                    placeholder="Your Region value"
                     {...field}
                   />
                   <FormMessage />

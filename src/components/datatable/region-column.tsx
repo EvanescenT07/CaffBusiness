@@ -3,16 +3,16 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CellAction } from "@/components/detail/cell-action";
+import { CellAction } from "@/components/region/cell-action";
 
-export type DetailColumn = {
+export type RegionColumn = {
   id: string
   name: string
   value: string
   createdAt: string
 };
 
-export const column: ColumnDef<DetailColumn>[] = [
+export const column: ColumnDef<RegionColumn>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {

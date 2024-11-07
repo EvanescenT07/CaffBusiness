@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { Catalogs } from "@/types-db";
+import { Region } from "@/types-db";
 import { auth } from "@clerk/nextjs/server";
 import {
   addDoc,
@@ -24,12 +24,10 @@ export const POST = async (
       return new NextResponse("UnAuthorized", { status: 401 });
     }
 
-    const { label, imageUrl } = body;
+    const { name, value } = body;
 
-    if (!label || !imageUrl) {
-      return new NextResponse("Label and Image URL are Missing", {
-        status: 400,
-      });
+    if (!name || !value) {
+      return new NextResponse("Name and Value are missing", { status: 400 });
     }
 
     if (!params.businessId) {
@@ -44,28 +42,28 @@ export const POST = async (
       }
     }
 
-    const catalogData = {
-      label,
-      imageUrl,
+    const regionData = {
+      name,
+      value,
       createdAt: serverTimestamp(),
     };
 
-    const catalogRef = await addDoc(
-      collection(db, "business", params.businessId, "catalog"),
-      catalogData
+    const regionRef = await addDoc(
+      collection(db, "business", params.businessId, "region"),
+      regionData
     );
 
-    const id = catalogRef.id;
+    const id = regionRef.id;
 
-    await updateDoc(doc(db, "business", params.businessId, "catalog", id), {
-      ...catalogData,
+    await updateDoc(doc(db, "business", params.businessId, "region", id), {
+      ...regionData,
       id,
-      updatedAt: serverTimestamp(),
+      updateAt: serverTimestamp(),
     });
 
-    return NextResponse.json({ id, ...catalogData }, { status: 201 });
+    return NextResponse.json({ id, ...regionData });
   } catch (error) {
-    console.log(`Business POST ERROR: ${error}`);
+    console.log(`Region POST Error: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
@@ -78,14 +76,14 @@ export const GET = async (
     if (!params.businessId) {
       return new NextResponse("Business ID is required", { status: 400 });
     }
-    const catalogData = (
+    const regionData = (
       await getDocs(
-        collection(doc(db, "business", params.businessId), "catalog")
+        collection(doc(db, "business", params.businessId), "region")
       )
-    ).docs.map((doc) => doc.data()) as Catalogs[];
-    return NextResponse.json(catalogData, { status: 200 });
+    ).docs.map((doc) => doc.data() as Region[]);
+    return NextResponse.json(regionData);
   } catch (error) {
-    console.log(`Business POST ERROR: ${error}`);
+    console.log(`Region GET Error: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };

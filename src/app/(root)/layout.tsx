@@ -20,6 +20,7 @@ const SetLayout = async ({ children }: SetLayoutProps) => {
     query(collection(db, "business"), where("userId", "==", userId))
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let business = null as any;
 
   businessSnap.forEach((doc) => {

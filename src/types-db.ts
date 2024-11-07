@@ -38,6 +38,29 @@ export interface Detail {
   id: string;
   name: string;
   value: string;
-  createdAt? : Timestamp;
-  updatedAt? : Timestamp;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
+}
+
+export interface Region {
+  id: string;
+  name: string;
+  value: string;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  quantity?: number;
+  image: { url: string }[];
+  isActive: boolean;
+  category: string;
+  option: string; 
+  detail: string;
+  region: string;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
 }

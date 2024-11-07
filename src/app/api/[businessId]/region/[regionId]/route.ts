@@ -1,5 +1,5 @@
-import { Catalogs } from "@/types-db";
 import { db } from "@/lib/firebase";
+import { Region } from "@/types-db";
 import { auth } from "@clerk/nextjs/server";
 import {
   deleteDoc,
@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 
 export const PATCH = async (
   request: Request,
-  { params }: { params: { businessId: string; catalogId: string } }
+  { params }: { params: { businessId: string; regionId: string } }
 ) => {
   try {
     const { userId } = auth();
@@ -21,11 +21,10 @@ export const PATCH = async (
     if (!userId) {
       return new NextResponse("UnAuthorized", { status: 401 });
     }
+    const { name, value } = body;
 
-    const { label, imageUrl } = body;
-
-    if (!label || !imageUrl) {
-      return new NextResponse("Label and Image URL are Missing", {
+    if (!name || !value) {
+      return new NextResponse("Name and Value are missing", {
         status: 400,
       });
     }
@@ -33,71 +32,63 @@ export const PATCH = async (
     if (!params.businessId) {
       return new NextResponse("Business ID is required", { status: 400 });
     }
-
-    if (!params.catalogId) {
-      return new NextResponse("Catalog ID is required", { status: 400 });
+    if (!params.regionId) {
+      return new NextResponse("Region ID is required", { status: 400 });
     }
 
-    const businesses = await getDoc(doc(db, "business", params.businessId));
+    const businessess = await getDoc(doc(db, "business", params.businessId));
 
-    if (businesses.exists()) {
-      const businessData = businesses.data();
+    if (businessess.exists()) {
+      const businessData = businessess.data();
       if (businessData?.userId !== userId) {
         return new NextResponse("UnAuthorized Access", { status: 500 });
       }
     }
 
-    const catalogRef = await getDoc(
-      doc(db, "business", params.businessId, "catalog", params.catalogId)
+    const regionRef = await getDoc(
+      doc(db, "business", params.businessId, "region", params.regionId)
     );
 
-    if (catalogRef.exists()) {
+    if (regionRef.exists()) {
       await updateDoc(
-        doc(db, "business", params.businessId, "catalog", params.catalogId),
+        doc(db, "business", params.businessId, "region", params.regionId),
         {
-          ...catalogRef.data(),
-          label,
-          imageUrl,
+          ...regionRef.data(),
+          name,
+          value,
           updatedAt: serverTimestamp(),
         }
       );
     } else {
-      return new NextResponse("Catalog not found", { status: 404 });
+      return new NextResponse("Region not found", { status: 400 });
     }
 
-    const catalogs = (
+    const region = (
       await getDoc(
-        doc(db, "business", params.businessId, "catalog", params.catalogId)
+        doc(db, "business", params.businessId, "region", params.regionId)
       )
-    ).data() as Catalogs;
-
-    return NextResponse.json(
-      { message: "Catalog Updated successfully", catalogs },
-      { status: 200 }
-    );
+    ).data() as Region;
+    return NextResponse.json({ region });
   } catch (error) {
-    console.log(`Business POST Error: ${error}`);
+    console.log(`Region PATCH Error: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
 
 export const DELETE = async (
   request: Request,
-  { params }: { params: { businessId: string; catalogId: string } }
+  { params }: { params: { businessId: string; regionId: string } }
 ) => {
   try {
     const { userId } = auth();
-
     if (!userId) {
       return new NextResponse("UnAuthorized", { status: 401 });
     }
-
     if (!params.businessId) {
       return new NextResponse("Business ID is required", { status: 400 });
     }
-
-    if (!params.catalogId) {
-      return new NextResponse("Catalog ID is required", { status: 400 });
+    if (!params.regionId) {
+      return new NextResponse("Region ID is required", { status: 400 });
     }
 
     const businesses = await getDoc(doc(db, "business", params.businessId));
@@ -107,20 +98,18 @@ export const DELETE = async (
         return new NextResponse("UnAuthorized Access", { status: 500 });
       }
     }
-
-    const catalogRef = doc(
+    const regionRef = doc(
       db,
       "business",
       params.businessId,
-      "catalog",
-      params.catalogId
+      "region",
+      params.regionId
     );
 
-    await deleteDoc(catalogRef);
-
-    return NextResponse.json({ message: "Catalog Deleted" }), { status: 200 };
+    await deleteDoc(regionRef);
+    return NextResponse.json({ msg: "Region Deleted" });
   } catch (error) {
-    console.log(`Business POST ERROR: ${error}`);
+    console.log(`Region DELETE Error: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };

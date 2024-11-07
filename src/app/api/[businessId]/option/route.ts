@@ -62,9 +62,10 @@ export const POST = async (
       id,
       updateaAt: serverTimestamp(),
     });
+
     return NextResponse.json({ id, ...optionData });
   } catch (error) {
-    console.log(`Option POST ERROR: ${error}`);
+    console.log(`Option POST Error: ${error}`);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 };
