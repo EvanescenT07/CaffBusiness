@@ -3,12 +3,15 @@ import { Product } from "@/types-db";
 import { auth } from "@clerk/nextjs/server";
 import {
   addDoc,
+  and,
   collection,
   doc,
   getDoc,
   getDocs,
+  query,
   serverTimestamp,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
@@ -24,16 +27,7 @@ export const POST = async (
       return new NextResponse("UnAuthorized", { status: 401 });
     }
 
-    const { 
-      name,
-      price,
-      image,
-      isActive,
-      category,
-      option,
-      detail,
-      region,
-     } =
+    const { name, price, image, isActive, category, option, detail, region } =
       body;
 
     if (
@@ -101,11 +95,54 @@ export const GET = async (
       return new NextResponse("Business ID is required", { status: 400 });
     }
 
-    const productData = (
-      await getDocs(
-        collection(doc(db, "business", params.businessId), "product")
-      )
-    ).docs.map((doc) => doc.data()) as Product[];
+    const url = new URL(request.url);
+    const productParams = url.searchParams;
+
+    const productRef = collection(
+      doc(db, "business", params.businessId),
+      "product"
+    );
+
+    let productQuery;
+
+    const queryConst = [];
+
+    if (productParams.has("option")) {
+      queryConst.push(where("option", "==", productParams.get("option")));
+    }
+
+    if (productParams.has("categories")) {
+      queryConst.push(where("categories", "==", productParams.get("categories")));
+    }
+
+    if (productParams.has("detail")) {
+      queryConst.push(where("detail", "==", productParams.get("detail")));
+    }
+
+    if (productParams.has("region")) {
+      queryConst.push(where("region", "==", productParams.get("region")));
+    }
+
+    if (productParams.has("isActive")) {
+      queryConst.push(
+        where(
+          "isActive",
+          "==",
+          productParams.get("isActive") === "true" ? true : false
+        )
+      );
+    }
+
+    if (queryConst.length > 0) {
+      productQuery = query(productRef, and(...queryConst));
+    } else productQuery = query(productRef);
+
+    const querySnapshot = await getDocs(productQuery);
+
+    const productData: Product[] = querySnapshot.docs.map(
+      (doc) => doc.data() as Product
+    );
+
     return NextResponse.json(productData, { status: 200 });
   } catch (error) {
     console.log(`Product GET ERROR: ${error}`);

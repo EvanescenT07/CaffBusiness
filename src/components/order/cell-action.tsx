@@ -1,21 +1,16 @@
-import { ProductColumn } from "@/components/datatable/product-column";
+import { OrderColumn } from "@/components/datatable/order-column";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { AlertDeleteModal } from "@/components/modal/alert-delete-modal";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
+import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Copy, Edit, MoreVerticalIcon, Trash } from "lucide-react";
 
 interface CellActionProps {
-  data: ProductColumn;
+  data: OrderColumn;
 }
 
 export const CellAction = ({ data }: CellActionProps) => {
@@ -23,43 +18,44 @@ export const CellAction = ({ data }: CellActionProps) => {
   const params = useParams();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const  [isOpen, setIsOpen] = useState(false);
 
-  const onCopy = (id: string) => {
+  const onCopy = (id : string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Product ID copied to clipboard");
-  };
+    toast.success("Order ID copied to clipboard");
+  }
 
   const onEdit = () => {
-    router.push(`/${params.businessId}/product/${data.id}`);
-  };
+    router.push(`/${params.businessId}/order/${data.id}`);
+  }
 
   const onDelete = async () => {
     try {
-      setIsLoading(true);
-      await axios.delete(`/api/${params.businessId}/product/${data.id}`);
-      router.refresh();
-      router.push(`/${params.businessId}/product`);
-      toast.success("Product deleted");
+        setIsLoading(true)
+        await axios.delete(`/api/${params.businessId}/order/${data.id}`)
+        router.refresh()
+        router.push(`/${params.businessId}/order`)
+        toast.success("Order deleted")
     } catch (error) {
-      console.error("Error deleting product: ", error);
-      toast.error("Something went wrong");
+        console.error("Error deleting order: ", error)
+        toast.error("Something went wrong")
     } finally {
-      setIsLoading(false);
-      setIsOpen(false);
-      router.refresh();
+        setIsLoading(false)
+        setIsOpen(false)
+        router.refresh()
     }
-  };
+  }
 
   return (
     <>
       <AlertDeleteModal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        onConfirm={onDelete}
-        loading={isLoading}
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      onConfirm={onDelete}
+      loading={isLoading}
       />
-      <DropdownMenu>
+
+<DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="h-8 w-8 p-0" variant={"ghost"}>
             <span className="sr-only">Open</span>
@@ -83,5 +79,5 @@ export const CellAction = ({ data }: CellActionProps) => {
         </DropdownMenuContent>
       </DropdownMenu>
     </>
-  );
+  )
 };

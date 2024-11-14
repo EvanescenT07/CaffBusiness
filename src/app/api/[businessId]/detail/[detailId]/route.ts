@@ -106,7 +106,7 @@ export const DELETE = async (
       db,
       "business",
       params.businessId,
-      "option",
+      "detail",
       params.detailId
     );
 

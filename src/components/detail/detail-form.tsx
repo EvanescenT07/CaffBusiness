@@ -63,6 +63,8 @@ export const DetailForm = ({ initialData }: DetailFormProps) => {
         await axios.post(`/api/${params.businessId}/detail`, data);
       }
       toast.success(toastMessage);
+      router.refresh();
+      router.push(`/${params.businessId}/detail`);
     } catch (error) {
       console.error("Error submitting form: ", error);
       toast.error("Something went wrong");
@@ -86,6 +88,7 @@ export const DetailForm = ({ initialData }: DetailFormProps) => {
     } finally {
       setIsLoading(false);
       setIsOpen(false);
+      router.refresh();
     }
   };
 

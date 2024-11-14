@@ -1,7 +1,15 @@
-import { db } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import { Business } from "@/types-db";
 import { auth } from "@clerk/nextjs/server";
-import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import { NextResponse } from "next/server";
 
 export const PATCH = async (
@@ -54,6 +62,85 @@ export const DELETE = async (
     }
 
     const dbRef = doc(db, "business", params.businessId);
+
+    const catalogCollection = await getDocs(
+      collection(db, `business/${params.businessId}/catalog`)
+    );
+    catalogCollection.forEach(async (catalogDoc) => {
+      await deleteDoc(catalogDoc.ref);
+      const catalogImageURL = catalogDoc.data().imageUrl;
+      if (catalogImageURL) {
+        const imageRef = ref(storage, catalogImageURL);
+        await deleteObject(imageRef);
+      }
+    });
+
+    const categoriesCollection = await getDocs(
+      collection(db, `business/${params.businessId}/categories`)
+    );
+    categoriesCollection.forEach(async (categoryDoc) => {
+      await deleteDoc(categoryDoc.ref);
+    });
+
+    const optionsCollection = await getDocs(
+      collection(db, `business/${params.businessId}/option`)
+    );
+    optionsCollection.forEach(async (optionDoc) => {
+      await deleteDoc(optionDoc.ref);
+    });
+
+    const detailsCollection = await getDocs(
+      collection(db, `business/${params.businessId}/detail`)
+    );
+    detailsCollection.forEach(async (detailDoc) => {
+      await deleteDoc(detailDoc.ref);
+    });
+
+    const regionsCollection = await getDocs(
+      collection(db, `business/${params.businessId}/region`)
+    );
+    regionsCollection.forEach(async (regionDoc) => {
+      await deleteDoc(regionDoc.ref);
+    });
+
+    const productsCollection = await getDocs(
+      collection(db, `business/${params.businessId}/product`)
+    );
+    productsCollection.forEach(async (productDoc) => {
+      await deleteDoc(productDoc.ref);
+      const imagesProduct = productDoc.data().image;
+      if (imagesProduct && Array.isArray(imagesProduct)) {
+        await Promise.all(
+          imagesProduct.map(async (image) => {
+            const imageRef = ref(storage, image.url);
+            await deleteObject(imageRef);
+          })
+        );
+      }
+    });
+
+    const ordersCollection = await getDocs(
+      collection(db, `business/${params.businessId}/orders`)
+    );
+    ordersCollection.forEach(async (ordersDoc) => {
+      await deleteDoc(ordersDoc.ref);
+      const ordersItemArray = ordersDoc.data().orderItems;
+      if (ordersItemArray && Array.isArray(ordersItemArray)) {
+        await Promise.all(
+          ordersItemArray.map(async (orderItem) => {
+            const itemImagesArray = orderItem.images;
+            if (itemImagesArray && Array.isArray(itemImagesArray)) {
+              await Promise.all(
+                itemImagesArray.map(async (itemImage) => {
+                  const itemImageRef = ref(storage, itemImage.url);
+                  await deleteObject(itemImageRef);
+                })
+              );
+            }
+          })
+        );
+      }
+    });
 
     await deleteDoc(dbRef);
 

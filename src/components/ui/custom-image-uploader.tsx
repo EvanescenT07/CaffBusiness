@@ -54,7 +54,7 @@ const CustomImageUploader = ({
 
     files.forEach((file: File) => {
       const uploadImage = uploadBytesResumable(
-        ref(storage, `Images/Products/${Date.now()}-${file.name}`),
+        ref(storage, `Image/Products/${Date.now()}-${file.name}`),
         file,
         { contentType: file.type }
       );

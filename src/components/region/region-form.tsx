@@ -63,6 +63,8 @@ export const RegionForm = ({ initialData }: RegionFormProps) => {
         await axios.post(`/api/${params.businessId}/region`, data);
       }
       toast.success(toastMessage);
+      router.refresh();
+      router.push(`/${params.businessId}/region`);
     } catch (error) {
       console.error("Error submitting form: ", error);
       toast.error("Something went wrong");
